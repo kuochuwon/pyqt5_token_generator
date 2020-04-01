@@ -32,10 +32,11 @@ class App(QMainWindow):
         self.up_textbox.move(20, 20)
         self.up_textbox.resize(280, 180)
 
-        # Create down textbox
-        # self.down_textbox = QLineEdit(self)
-        # self.down_textbox.move(20, 300)
-        # self.down_textbox.resize(280, 180)
+        # Create textbox below
+        # Add text field
+        self.text = QPlainTextEdit(self)
+        self.text.move(20, 310)
+        self.text.resize(280, 180)
 
         # Create a button in the window
         self.button = QPushButton('Show text', self)
@@ -44,11 +45,6 @@ class App(QMainWindow):
         # Create a copy button in the window
         self.copy_button = QPushButton('Copy', self)
         self.copy_button.move(260, 240)
-
-        # Create a close button in the window
-        # self.pushButton.clicked.connect(MainWindow.close)
-        # self.close_button = QPushButton('Close', self)
-        # self.copy_button.move(260, 240)
 
         # connect button to function on_click
         self.button.clicked.connect(self.on_click)
@@ -66,15 +62,18 @@ class App(QMainWindow):
     @pyqtSlot()
     def on_click(self):
         textboxValue = self.up_textbox.text()
-        # result_token = App.extract(textboxValue)
+        self.text.insertPlainText(
+            textboxValue + "\n")
         QMessageBox.question(self, 'Message - Token generator',
-                             result_token, QMessageBox.Ok)
+                             textboxValue, QMessageBox.Ok)
 
     @pyqtSlot()
     def copy_click(self):
         textboxValue = self.up_textbox.text()
         result_token = App.extract(textboxValue)
-        self.up_textbox.text()
+        self.text.insertPlainText(
+            result_token + "\n")
+
         clipboard = QApplication.clipboard()
         clipboard.setText(result_token)
 
