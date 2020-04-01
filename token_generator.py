@@ -1,4 +1,5 @@
 import sys
+import json
 from PyQt5.QtWidgets import (QMainWindow,
                              QApplication,
                              QWidget,
@@ -16,20 +17,25 @@ class App(QMainWindow):
     def __init__(self):
         super().__init__()
         self.title = 'PyQt5 Token generator'
-        self.left = 50
-        self.top = 50
+        self.left = 500
+        self.top = 500
         self.width = 400
-        self.height = 300
+        self.height = 700
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        # Create textbox
-        self.textbox = QLineEdit(self)
-        self.textbox.move(20, 20)
-        self.textbox.resize(280, 180)
+        # Create up textbox
+        self.up_textbox = QLineEdit(self)
+        self.up_textbox.move(20, 20)
+        self.up_textbox.resize(280, 180)
+
+        # Create down textbox
+        # self.down_textbox = QLineEdit(self)
+        # self.down_textbox.move(20, 300)
+        # self.down_textbox.resize(280, 180)
 
         # Create a button in the window
         self.button = QPushButton('Show text', self)
@@ -39,28 +45,38 @@ class App(QMainWindow):
         self.copy_button = QPushButton('Copy', self)
         self.copy_button.move(260, 240)
 
+        # Create a close button in the window
+        # self.pushButton.clicked.connect(MainWindow.close)
+        # self.close_button = QPushButton('Close', self)
+        # self.copy_button.move(260, 240)
+
         # connect button to function on_click
         self.button.clicked.connect(self.on_click)
         self.copy_button.clicked.connect(self.copy_click)
 
-        # print on screen
-        # self.textedit = QPlainTextEdit(self)
-        # self.textedit.move(10, 10)
-        # self.textedit.resize(400, 200)
-
         self.show()
+
+    def extract(text):
+        json_data = json.loads(text)
+        tokens = json_data.get("token")
+        access_token = tokens.get("access_token")
+        output = f"Bearer {access_token}"
+        return output
 
     @pyqtSlot()
     def on_click(self):
-        textboxValue = self.textbox.text()
-        QMessageBox.question(self, 'Message - pythonspot.com',
-                             "bearer " + textboxValue, QMessageBox.Ok)
+        textboxValue = self.up_textbox.text()
+        # result_token = App.extract(textboxValue)
+        QMessageBox.question(self, 'Message - Token generator',
+                             result_token, QMessageBox.Ok)
 
     @pyqtSlot()
     def copy_click(self):
-        textboxValue = self.textbox.text()
+        textboxValue = self.up_textbox.text()
+        result_token = App.extract(textboxValue)
+        self.up_textbox.text()
         clipboard = QApplication.clipboard()
-        clipboard.setText("bearer " + textboxValue)
+        clipboard.setText(result_token)
 
 
 if __name__ == '__main__':
